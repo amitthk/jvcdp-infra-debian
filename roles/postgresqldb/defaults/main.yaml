@@ -1,0 +1,7 @@
+---
+become: false
+base_dir: '~/app/'
+dbname: jvcdpserver
+dbuser: sa
+dbpassword: passw0rd
+

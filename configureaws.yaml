@@ -1,0 +1,5 @@
+---
+- hosts: datacenter_host
+  remote_user: root
+  roles:
+    - configureaws

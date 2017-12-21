@@ -1,0 +1,5 @@
+---
+base_dir: "~/app/"
+s3_bucket_name: jvcdp-repo
+project_id: user-api
+warName: user-api.war

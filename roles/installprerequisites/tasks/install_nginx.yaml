@@ -1,0 +1,19 @@
+- name: Check if nginx is already installed
+  command: dpkg-query -l nginx
+  register: nginx_check
+  ignore_errors: true
+
+- name: apt-get update
+  command: apt update
+  become: true
+
+- name: Install nginx now.
+  apt: name=nginx state=present
+  become: true
+  when: ((ansible_os_family == 'Debian')and((nginx_check.stdout.find('no packages found') != -1)or(nginx_check.stderr.find('no packages found') != -1)))
+
+- name: Ensure nginx is started and enabled at boot.
+  service:
+    name: nginx
+    state: started
+    enabled: yes

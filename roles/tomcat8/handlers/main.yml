@@ -1,0 +1,8 @@
+---
+- name: tomcat-8-restart
+  service: name=tomcat state=restarted
+  become: true
+
+- name: restart iptables
+  service: name=iptables state=restarted
+  become: true

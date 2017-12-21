@@ -1,0 +1,9 @@
+---
+- name: reread supervisord
+  shell: /usr/bin/supervisorctl reread && /usr/bin/supervisorctl update
+- name: systemctl reload
+  shell: systemctl daemon-reload
+- name: stop nginx
+  service: name=nginx state=stopped
+- name: restart nginx
+  service: name=nginx state=restarted

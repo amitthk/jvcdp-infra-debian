@@ -1,0 +1,29 @@
+---   
+   - name: aws configure
+     expect:
+      command: /bin/bash -c "aws configure"
+      timeout:
+      responses:
+         AWS Access Key ID*: "{{ access_id }}"
+         AWS Secret Access Key*: "{{ secret_key }}"
+         Default region name*: "{{ aws_region }}"
+         Default output format*: "{{ format }}"
+      echo: yes
+
+   - name:  ec2 provision
+     ec2:
+      key_name: "{{ mykey }}"
+      instance_type: "{{ instance }}"
+      image: "{{ image }}"
+      region: "{{ aws_region }}"
+      vpc_subnet_id: "{{ subnet_id }}"
+      group_id: "{{ groupid }}"
+      assign_public_ip: yes
+     register: result
+   - debug: var=result
+   - name: get the instance id
+     shell:  aws ec2 describe-instances --instance-ids {{ item }} | grep PublicIpAddress | awk -F ":" '{print $2}' | tr -d '",' >> /home/ubuntu/code/devopscdp/ansible/hosts
+     with_items:
+         - "{{ result.instance_ids }}"
+     register: output
+   - debug: var=output

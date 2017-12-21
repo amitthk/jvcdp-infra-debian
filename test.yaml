@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  become: true
+  become_user: amitthk
+  vars:
+    root_base_dir: "~/app/"
+    install_prereq: false
+    aws_access_key_id: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+    aws_secret_access_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+  tasks:
+    - debug:
+        var: aws_access_key_id
+    - debug:
+        var: aws_secret_access_key

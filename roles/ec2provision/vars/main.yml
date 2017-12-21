@@ -1,0 +1,10 @@
+---
+access_id: 'AKIAIFLWUA4C6UBRMYIA'
+secret_key: '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'
+aws_region: us-east-1
+format: json
+subnet_id: subnet-d0d8e098
+mykey: jvcdpjenkinskey
+image: ami-4fffc834
+instance: t2.micro
+groupid: sg-823188f2

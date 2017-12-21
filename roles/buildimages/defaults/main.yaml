@@ -1,0 +1,4 @@
+---
+base_dir: '~/app/'
+install_docker: false
+sit_base_url: jvcdpserver.dynu.net

@@ -1,0 +1,4 @@
+---
+base_dir: '~/app/'
+sit_base_url: 'jvcdpserver.dynu.net'
+project_id: 'jvcdpserver'

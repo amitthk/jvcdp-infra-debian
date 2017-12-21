@@ -1,0 +1,17 @@
+---
+- hosts: datacenter_host
+  gather_facts: true
+  become: false
+  vars:
+    root_base_dir: "~/app/"
+    install_prereq: false
+  roles:
+    - { role: installprerequisites, install_docker: true, when: install_prereq }
+    - name: s3downloadlatest
+      base_dir: "{{root_base_dir}}"
+    - { role: postgresqldb }
+    - { role: dashboard }
+    - { role: userapi }
+    - { role: dashboardapi }
+
+      

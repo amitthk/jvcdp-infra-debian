@@ -1,0 +1,10 @@
+---
+- name: "download all latest"
+  debug:
+    msg: download latest all
+- include: download_item.yaml
+  with_items: "{{projects}}"
+
+- include: cleanup_dest.yaml
+  with_items: "{{projects}}"
+  when: item.artifact_type !='sql'

@@ -1,0 +1,14 @@
+---
+- name: "configure the dashboard UI"
+  debug:
+    msg: stop the nginx first
+  notify: stop nginx
+
+- name: copy over the nginx template
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: 0755
+  notify: 
+    - systemctl reload
+    - restart nginx

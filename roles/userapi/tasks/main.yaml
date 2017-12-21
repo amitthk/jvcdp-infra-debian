@@ -1,0 +1,31 @@
+---
+- name: "configure the user API"
+  debug:
+    msg: configure the user API
+- name: Ensures /usr/share/tomcat/webapps/{{project_id}} dir exists
+  file:
+    path: "/usr/share/tomcat/webapps/{{project_id}}"
+    state: directory
+  become: true
+
+- name: Ensure gtar/unzip is installed on target machine
+  apt: name=unzip state=present
+  become: true
+  when: ansible_os_family == 'Debian'
+
+
+- name: Unzip WAR file
+  unarchive:
+    src: "/home/{{ansible_ssh_user}}/app/docker/{{project_id}}/app/{{ warName }}"
+    dest: /usr/share/tomcat/webapps/{{project_id}}/ 
+    mode: 0755
+    owner: tomcat
+    group: tomcat
+    remote_src: true
+  become: true
+  notify:
+      - restart tomcat
+
+# - file:
+#     path: "{{base_dir}}docker/{{project_id}}/app/{{ warName }}"
+#     state: absent

@@ -1,0 +1,6 @@
+.project
+ansible/docker/jvcdpserver/app
+ansible/docker/user-api/app
+ansible/docker/dasboard-api/app
+ansible/docker/setup-api/app
+*.retry

@@ -1,0 +1,11 @@
+---
+- hosts: dashboard_api
+  gather_facts: true
+  become: false
+  vars:
+    root_base_dir: "~/app/"
+    install_prereq: false
+  roles:
+    - name: dashboardapi
+      base_dir: "{{root_base_dir}}"
+      become: true

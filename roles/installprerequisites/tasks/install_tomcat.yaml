@@ -1,0 +1,22 @@
+- name: Check if tomcat8 is already installed
+  command: service tomcat status
+  register: tomcat_check
+  ignore_errors: true
+
+- name: apt-get update
+  command: apt update
+  become: true
+
+- name: Install tomcat8 now.
+  include_role:
+    name: tomcat8
+    become: true
+  when:
+    - ((ansible_os_family == 'Debian')and((tomcat_check.stdout.find('No such file or directory') != -1)or(tomcat_check.stderr.find('No such file or directory') != -1)))
+
+
+# - name: Ensure tomcat8 is started and enabled at boot.
+#   service:
+#     name: tomcat
+#     state: started
+#     enabled: yes

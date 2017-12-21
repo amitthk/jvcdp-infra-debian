@@ -1,0 +1,35 @@
+- set_fact: project="{{item}}"
+- debug: var=project
+- name: "clean up the old artifact :  {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.{{project.artifact_type}}"
+  shell: "rm -f {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.{{project.artifact_type}}"
+  register: result
+  ignore_errors: true
+- debug: var=result
+
+- name: "rename the latest artifact to {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.{{project.artifact_type}}"
+  shell: "mv {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}*.{{project.artifact_type}}  {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.{{project.artifact_type}}"
+  register: result
+  ignore_errors: true
+  when: project.artifact_type != 'tar.gz'
+- debug: var=result
+
+
+- name: "rename {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.tar.gz and set permissions"
+  shell: "cd {{base_dir}}docker/{{project.project_id}}/app && mv {{project.project_id}}*.tar.gz {{project.project_id}}.tar.gz && chmod 0755 {{project.project_id}}.tar.gz"
+  register: resp
+  ignore_errors: true
+  when: project.artifact_type == 'tar.gz'
+- debug:
+    var: resp
+
+- name: "untar the {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.tar.gz"
+  shell: "cd {{base_dir}}docker/{{project.project_id}}/app && tar -xpzvf {{project.project_id}}.tar.gz && rm -rf {{project.project_id}}*.tar.gz"
+  register: resp
+  when: project.artifact_type == 'tar.gz'
+- debug:
+    var: resp
+
+# - name: "set permissions for {{base_dir}}docker/{{project.project_id}}/app/{{project.project_id}}.{{project.artifact_type}}"
+#   command: "chmod -R 0755 {{base_dir}}docker/{{project.project_id}}/app"
+#   register: result
+# - debug: var=result

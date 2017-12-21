@@ -1,0 +1,13 @@
+---
+http_port: 8080
+https_port: 8443
+
+# This will configure a default manager-gui user:
+
+admin_username: admin
+admin_password: thetomcatadmin
+
+aws_region: us-east-1
+aws_output_format: 'json'
+aws_cli_user: '{{ ansible_ssh_user }}'
+aws_cli_group: '{{ ansible_ssh_user }}'

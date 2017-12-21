@@ -1,0 +1,43 @@
+- hosts: jvcdpserver.dynu.net 
+  user: ubuntu
+  become: true
+  gather_facts: yes
+  vars:
+    aws_region: us-east-1
+    aws_output_format: json
+    subnet_id: subnet-d0d8e098
+    mykey: jvcdpjenkinskey
+  vars_files:
+    - secrets.yml
+  tasks:
+   - name: aws configure
+     expect:
+      command: /bin/bash -c "aws configure"
+      timeout:
+      responses:
+         AWS Access Key ID*: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+         AWS Secret Access Key*: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+         Default region name*:  "{{ lookup('env', 'AWS_DEFAULT_REGION') }}"
+         Default output format*: "{{ lookup('env', 'AWS_DEFAULT_OUTPUT') }}"
+      echo: yes
+
+   - name:  ec2 provision
+     ec2:
+      key_name: "{{ mykey }}"
+      instance_type: t2.micro
+      image: ami-4fffc834
+      region: "{{ aws_region }}"
+      vpc_subnet_id: "{{ subnet_id }}"
+      group_id: sg-823188f2
+      assign_public_ip: yes
+     register: result
+   - debug: var=result
+   - name: Get pubic ip addr of ec2instance(jvcdpserver.dynu.net@/home/ubuntu/code/devopscdp/ansible/hosts in bottom new}
+  #  shell: echo {{ item }}
+     shell:  aws ec2 describe-instances --instance-ids {{ item }} | grep PublicIpAddress | awk -F ":" '{print $2}' | tr -d '",' >> /home/ubuntu/code/devopscdp/ansible/hosts
+     with_items:
+         - "{{ result.instance_ids }}"
+     register: output
+   - debug: var=output
+
+

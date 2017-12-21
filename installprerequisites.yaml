@@ -1,0 +1,12 @@
+- hosts: datacenter_host
+  gather_facts: false
+  become: true
+  vars:
+    root_base_dir: "~/app/"
+  pre_tasks:
+     - name: insall python
+       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+       changed_when: False
+     - setup: #aka gather_facts
+  roles:
+     - { role: installprerequisites , become: true}
